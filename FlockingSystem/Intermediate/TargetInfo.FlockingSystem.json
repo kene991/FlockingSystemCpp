@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "FlockingSystem",
+			"Path": "..\\Source\\FlockingSystem.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "FlockingSystemEditor",
+			"Path": "..\\Source\\FlockingSystemEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}

@@ -1,0 +1,13 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\users\\kumel\\documents\\unrealgit\\flockingsystemcpp\\flockingsystem\\intermediate\\build\\win64\\unrealeditor\\inc\\flockingsystem\\uht\\flockingsystem.init.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\users\\kumel\\documents\\unrealgit\\flockingsystemcpp\\flockingsystem\\intermediate\\build\\win64\\x64\\flockingsystemeditor\\development\\engine\\sharedpch.engine.cpp20.h.pch",
+        "Includes": [
+            "c:\\users\\kumel\\documents\\unrealgit\\flockingsystemcpp\\flockingsystem\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\flockingsystem\\definitions.flockingsystem.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

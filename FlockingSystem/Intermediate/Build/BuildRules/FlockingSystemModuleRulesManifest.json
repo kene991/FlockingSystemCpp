@@ -1,0 +1,8 @@
+{
+	"SourceFiles": [
+		"C:\\Users\\kumel\\Documents\\UnrealGit\\FlockingSystemCpp\\FlockingSystem\\Source\\FlockingSystem\\FlockingSystem.Build.cs",
+		"C:\\Users\\kumel\\Documents\\UnrealGit\\FlockingSystemCpp\\FlockingSystem\\Source\\FlockingSystem.Target.cs",
+		"C:\\Users\\kumel\\Documents\\UnrealGit\\FlockingSystemCpp\\FlockingSystem\\Source\\FlockingSystemEditor.Target.cs"
+	],
+	"EngineVersion": "5.3.2"
+}

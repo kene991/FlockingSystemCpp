@@ -1,0 +1,17 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-FlockingSystem.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Users\kumel\Documents\UnrealGit\FlockingSystemCpp\FlockingSystem\Intermediate\Build\Win64\x64\FlockingSystemEditor\Development\Engine\SharedPCH.Engine.Cpp20.h.obj"
+"C:\Users\kumel\Documents\UnrealGit\FlockingSystemCpp\FlockingSystem\Intermediate\Build\Win64\x64\UnrealEditor\Development\FlockingSystem\Boid.gen.cpp.obj"
+"C:\Users\kumel\Documents\UnrealGit\FlockingSystemCpp\FlockingSystem\Intermediate\Build\Win64\x64\UnrealEditor\Development\FlockingSystem\BoidManager.gen.cpp.obj"
+"C:\Users\kumel\Documents\UnrealGit\FlockingSystemCpp\FlockingSystem\Intermediate\Build\Win64\x64\UnrealEditor\Development\FlockingSystem\FlockingSystem.init.gen.cpp.obj"
+"C:\Users\kumel\Documents\UnrealGit\FlockingSystemCpp\FlockingSystem\Intermediate\Build\Win64\x64\UnrealEditor\Development\FlockingSystem\Boid.cpp.obj"
+"C:\Users\kumel\Documents\UnrealGit\FlockingSystemCpp\FlockingSystem\Intermediate\Build\Win64\x64\UnrealEditor\Development\FlockingSystem\BoidManager.cpp.obj"
+"C:\Users\kumel\Documents\UnrealGit\FlockingSystemCpp\FlockingSystem\Intermediate\Build\Win64\x64\UnrealEditor\Development\FlockingSystem\FlockingSystem.cpp.obj"
+"C:\Users\kumel\Documents\UnrealGit\FlockingSystemCpp\FlockingSystem\Intermediate\Build\Win64\x64\UnrealEditor\Development\FlockingSystem\Default.rc2.res"
+/OUT:"C:\Users\kumel\Documents\UnrealGit\FlockingSystemCpp\FlockingSystem\Intermediate\Build\Win64\x64\UnrealEditor\Development\FlockingSystem\UnrealEditor-FlockingSystem.lib"

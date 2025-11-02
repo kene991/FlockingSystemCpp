@@ -1,0 +1,22 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\users\\kumel\\documents\\unrealgit\\flockingsystemcpp\\flockingsystem\\intermediate\\build\\win64\\unrealeditor\\inc\\flockingsystem\\uht\\boidmanager.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\users\\kumel\\documents\\unrealgit\\flockingsystemcpp\\flockingsystem\\intermediate\\build\\win64\\x64\\flockingsystemeditor\\development\\engine\\sharedpch.engine.cpp20.h.pch",
+        "Includes": [
+            "c:\\users\\kumel\\documents\\unrealgit\\flockingsystemcpp\\flockingsystem\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\flockingsystem\\definitions.flockingsystem.h",
+            "c:\\users\\kumel\\documents\\unrealgit\\flockingsystemcpp\\flockingsystem\\source\\flockingsystem\\boidmanager.h",
+            "g:\\epicgameslibrary\\ue_5.3\\engine\\source\\runtime\\coreuobject\\public\\uobject\\noexporttypes.h",
+            "g:\\epicgameslibrary\\ue_5.3\\engine\\source\\runtime\\coreuobject\\public\\uobject\\propertyaccessutil.h",
+            "g:\\epicgameslibrary\\ue_5.3\\engine\\source\\runtime\\coreuobject\\public\\serialization\\testundeclaredscriptstructobjectreferences.h",
+            "g:\\epicgameslibrary\\ue_5.3\\engine\\source\\runtime\\core\\public\\math\\unitconversion.h",
+            "g:\\epicgameslibrary\\ue_5.3\\engine\\source\\runtime\\core\\public\\math\\unitconversion.inl",
+            "g:\\epicgameslibrary\\ue_5.3\\engine\\source\\runtime\\core\\public\\internationalization\\polyglottextdata.h",
+            "g:\\epicgameslibrary\\ue_5.3\\engine\\source\\runtime\\coreuobject\\public\\assetregistry\\arfilter.h",
+            "c:\\users\\kumel\\documents\\unrealgit\\flockingsystemcpp\\flockingsystem\\intermediate\\build\\win64\\unrealeditor\\inc\\flockingsystem\\uht\\boidmanager.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
