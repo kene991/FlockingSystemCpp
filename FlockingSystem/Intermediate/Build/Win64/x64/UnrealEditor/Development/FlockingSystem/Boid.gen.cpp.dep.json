@@ -7,6 +7,8 @@
         "Includes": [
             "c:\\users\\kumel\\documents\\unrealgit\\flockingsystemcpp\\flockingsystem\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\flockingsystem\\definitions.flockingsystem.h",
             "c:\\users\\kumel\\documents\\unrealgit\\flockingsystemcpp\\flockingsystem\\source\\flockingsystem\\boid.h",
+            "c:\\users\\kumel\\documents\\unrealgit\\flockingsystemcpp\\flockingsystem\\source\\flockingsystem\\boidmanager.h",
+            "c:\\users\\kumel\\documents\\unrealgit\\flockingsystemcpp\\flockingsystem\\intermediate\\build\\win64\\unrealeditor\\inc\\flockingsystem\\uht\\boidmanager.generated.h",
             "c:\\users\\kumel\\documents\\unrealgit\\flockingsystemcpp\\flockingsystem\\intermediate\\build\\win64\\unrealeditor\\inc\\flockingsystem\\uht\\boid.generated.h"
         ],
         "ImportedModules": [],

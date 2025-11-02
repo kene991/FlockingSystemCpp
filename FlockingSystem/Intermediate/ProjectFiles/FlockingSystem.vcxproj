@@ -109,6 +109,7 @@
     <None Include="..\..\FlockingSystem.uproject"/>
     <None Include="..\..\Source\FlockingSystem.Target.cs"/>
     <None Include="..\..\Source\FlockingSystemEditor.Target.cs"/>
+    <None Include="..\..\.gitignore"/>
     <None Include="..\..\.vsconfig"/>
     <None Include="..\..\Config\DefaultEditor.ini"/>
     <None Include="..\..\Config\DefaultEngine.ini"/>

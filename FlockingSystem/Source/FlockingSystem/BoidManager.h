@@ -3,46 +3,36 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BoidManager.h"
 #include "GameFramework/Actor.h"
-#include "Boid.generated.h"
+#include "BoidManager.generated.h"
+
+class ABoid;
 
 UCLASS()
-class FLOCKINGSYSTEM_API ABoid : public AActor
+class FLOCKINGSYSTEM_API ABoidManager : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ABoid();
-
-	void SetSpeed(float speed);
-	void SetTurnSpeed(float turnSpeed);
+	ABoidManager();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	FVector BoundArea(FVector boid_position);
-	
-private:	
+private:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ABoid> BoidClass;
 
 	UPROPERTY(EditAnywhere)
-	float Speed;
+	int BoidCount;
 
 	UPROPERTY(EditAnywhere)
-	float TurnSpeed;
+	int DefaultTurnSpeed;
 	
-	FVector VelocityVector;
-
-	int Xmin = -640, Xmax = 0;
-	int Ymin = -1120, Ymax = -400;
-	int Zmin = 10, Zmax = 370;
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	
-	ABoidManager* BoidManager;
 
 };
