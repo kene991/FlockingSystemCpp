@@ -17,19 +17,47 @@ public:
 	// Sets default values for this actor's properties
 	ABoidManager();
 
+	FVector GetMinBounds();
+	FVector GetMaxBounds();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 private:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category="Setup Boid")
 	TSubclassOf<ABoid> BoidClass;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category="Setup Boid")
 	int BoidCount;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category="Distance")
+	float boidDistance;
+
+	UPROPERTY(EditAnywhere, Category="View Angle")
+	float boidCosAngleView;
+	
+	UPROPERTY(EditAnywhere, Category="Initialize Speed")
+	float speedMin;
+
+	UPROPERTY(EditAnywhere, Category="Initialize Speed")
+	float speedMax;
+	
+	UPROPERTY(EditAnywhere, Category="Initialize Speed")
 	int DefaultTurnSpeed;
+
+	UPROPERTY(EditAnywhere, Category="Bounds")
+     int Xmin = -640;
+	UPROPERTY(EditAnywhere, Category="Bounds")
+	 int Xmax = 0;
+	UPROPERTY(EditAnywhere, Category="Bounds")
+     int Ymin = -1120;
+    UPROPERTY(EditAnywhere, Category="Bounds")
+	 int Ymax = -400;
+	UPROPERTY(EditAnywhere, Category="Bounds")
+     int Zmin = 10;
+    UPROPERTY(EditAnywhere, Category="Bounds")
+	 int Zmax = 370;
 	
 public:	
 	// Called every frame

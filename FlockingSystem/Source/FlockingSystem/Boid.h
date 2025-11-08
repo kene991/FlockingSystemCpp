@@ -18,6 +18,8 @@ public:
 
 	void SetSpeed(float speed);
 	void SetTurnSpeed(float turnSpeed);
+	void SetDistance(float distance);
+	void SetAngleView(float angle);
 
 protected:
 	// Called when the game starts or when spawned
@@ -25,7 +27,16 @@ protected:
 
 	FVector BoundArea(FVector boid_position);
 	
-private:	
+private:
+
+	UPROPERTY(VisibleAnywhere)
+	TArray<class ABoid*> Neighbor;
+	
+	UPROPERTY(EditAnywhere)
+	float Distance = 50;
+
+	UPROPERTY(EditAnywhere)
+	float CosAngleView;
 
 	UPROPERTY(EditAnywhere)
 	float Speed;
@@ -34,10 +45,7 @@ private:
 	float TurnSpeed;
 	
 	FVector VelocityVector;
-
-	int Xmin = -640, Xmax = 0;
-	int Ymin = -1120, Ymax = -400;
-	int Zmin = 10, Zmax = 370;
+	void LockInsideBounds();
 
 public:	
 	// Called every frame

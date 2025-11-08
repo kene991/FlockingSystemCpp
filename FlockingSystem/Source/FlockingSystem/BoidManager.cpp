@@ -13,25 +13,33 @@ ABoidManager::ABoidManager()
 
 }
 
+FVector ABoidManager::GetMinBounds()
+{
+	return  FVector(Xmin,Ymin,Zmin);
+}
+
+FVector ABoidManager::GetMaxBounds()
+{
+	return  FVector(Xmax,Ymax,Zmax);
+}
+
 // Called when the game starts or when spawned
 void ABoidManager::BeginPlay()
 {
 	Super::BeginPlay();
-
-	int Xmin = -640, Xmax = 0;
-	int Ymin = -1120, Ymax = -400;
-	int Zmin = 10, Zmax = 370;
 	
-	FVector boundMin = FVector(-640, -1120, 10);
-	FVector boundMax = FVector(0, -400, 370);
+	FVector boundMin = FVector(Xmin, Ymin, Zmin);
+	FVector boundMax = FVector(Xmax, Ymax, Zmax);
 	FBox bounds = FBox(boundMin, boundMax); //creating a box Vector
 	
 	for (int i = 0; i < BoidCount; i++)
 	{
 		ABoid* Boid = GetWorld()->SpawnActor<ABoid>(BoidClass);
 		Boid->BoidManager = this;
+		Boid->SetDistance(boidDistance);
+		Boid->SetAngleView(boidCosAngleView);
 		Boid->SetActorLocation( FMath::RandPointInBox(bounds));
-		Boid->SetSpeed(FMath::FRandRange(-120.0f, 120.0f));
+		Boid->SetSpeed(FMath::FRandRange(speedMin, speedMax));
 		Boid->SetTurnSpeed(DefaultTurnSpeed);
 	}
 	
