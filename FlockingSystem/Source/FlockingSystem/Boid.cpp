@@ -6,6 +6,7 @@
 #include "GeometryCollection/GeometryCollectionComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Math/UnrealMath.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
@@ -130,6 +131,57 @@ FVector ABoid::AlignmentCalculation(TArray<ABoid*> Neighbors)
 	return  FVector::ZeroVector;
 }
 
+FVector ABoid::FindClearDirection()
+{
+	FVector bestDir = GetActorForwardVector();
+	float furthestUnobstructedDist =	0.0f;
+	FHitResult hit;
+	ECollisionChannel SenseChannel = ECC_GameTraceChannel1;
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this); // Ignore the actor performing the trace
+
+	for (int i = 0; i <BoidManager->GetRaysVectors().Num(); i++)
+	{
+		FVector LocalDir = BoidManager->GetRaysVectors()[i];
+		FVector WorldDir = GetTransform().GetRotation().RotateVector(LocalDir);
+		bool DirHit = GetWorld()->LineTraceSingleByChannel(hit, GetActorLocation(), GetActorLocation() + WorldDir * Distance, SenseChannel,  QueryParams);
+
+		//https://www.youtube.com/watch?v=ekNZW4vChwU
+		float Dot = FVector::DotProduct(WorldDir, GetActorForwardVector());
+		
+		if ((Dot < CosAngleView))
+		{
+			if (!DirHit)
+			{
+				// Perfect clear direction, return immediately
+				if (BoidManager->ShowDebug)
+					DrawDebugLine(GetWorld(), GetActorLocation(), GetActorLocation() + WorldDir * Distance, FColor::Green, false, -1.0f, 0, 1.5f);
+				
+				// no obstacle in view radius
+				return WorldDir * BoidManager->GetMaxSpeed() * BoidManager->AvoidenceWeight;
+			}
+			else
+			{
+				//if we hit something
+				if (hit.Distance > furthestUnobstructedDist)
+				{
+					bestDir = WorldDir;
+					furthestUnobstructedDist = hit.Distance;
+
+					if (BoidManager->ShowDebug)
+					{
+					DrawDebugLine(GetWorld(), GetActorLocation(), hit.ImpactPoint, FColor::Red, false, -1.0f, 0, 1.5f);
+					DrawDebugSphere(GetWorld(), hit.ImpactPoint, 8.0f, 12, FColor::Red, false, -1.0f, 0, 1.0f);
+					}
+			}
+			}
+	}
+		}
+				//return the direction away from the obstacle
+				return bestDir * BoidManager->GetMaxSpeed() * BoidManager->AvoidenceWeight; 
+		}
+
+
 FVector ABoid::SeparationCalculation(TArray<ABoid*> Neighbors)
 {
 	FVector V = FVector::ZeroVector;
@@ -179,6 +231,8 @@ void ABoid::Tick(float DeltaTime)
 	VelocityVector += AlignmentCalculation(Neighbor);
 	VelocityVector += CohesionCalculation(Neighbor);
 	VelocityVector += SeparationCalculation(Neighbor);
+
+	VelocityVector += FindClearDirection();
 	
 	BoidManager->LimitSpeed(this);
 
@@ -193,7 +247,7 @@ void ABoid::Tick(float DeltaTime)
 	FVector End = (GetActorLocation() + VelocityVector.GetSafeNormal() * Distance);
 	NeighborCheck(Start);
 
-	if (BoidManager->ShowDirection)
+	if (BoidManager->ShowDebug)
 	{
 		DrawDebugDirectionalArrow(GetWorld(), Start, End, 1.f, FColor::Red);
 	}

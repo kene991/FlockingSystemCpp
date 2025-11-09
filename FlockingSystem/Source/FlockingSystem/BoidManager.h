@@ -20,8 +20,14 @@ public:
 	FVector GetMinBounds();
 	FVector GetMaxBounds();
 
+	void CreateAvoidenceRays();
+	TArray<FVector> GetRaysVectors();
+
+	float GetMaxSpeed();
+	float GetMinSpeed();
+
 	UPROPERTY(EditAnywhere, Category="Boid Settings")
-	bool ShowDirection;
+	bool ShowDebug;
 	
 	void LimitSpeed(ABoid* boid);
 
@@ -33,6 +39,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category="Rule Factor", meta=(ClampMin="0.0", ClampMax="1.0", UIMin="0.0", UIMax="1.0"))
 	float AlignmentWeight;
+
+	UPROPERTY(EditAnywhere, Category="Rule Factor", meta=(ClampMin="0.0", ClampMax="1.0", UIMin="0.0", UIMax="1.0"))
+	float AvoidenceWeight;
 
 protected:
 	// Called when the game starts or when spawned
@@ -46,20 +55,22 @@ private:
 	int BoidCount;
 
 	UPROPERTY(EditAnywhere, Category="Distance")
-	float boidDistance;
+	float BoidDistance;
 
 	UPROPERTY(EditAnywhere, Category="View Angle")
-	float boidCosAngleView;
+	float BoidCosAngleView;
 	
 	UPROPERTY(EditAnywhere, Category="Initialize Speed")
-	float speedMin;
+	float SpeedMin;
 
 	UPROPERTY(EditAnywhere, Category="Initialize Speed")
-	float speedMax;
+	float SpeedMax;
 	
 	UPROPERTY(EditAnywhere, Category="Initialize Speed")
 	int DefaultTurnSpeed;
-	
+
+	UPROPERTY(EditAnywhere, Category="Avoidance")
+	int NumberOfPoints;
 
 	UPROPERTY(EditAnywhere, Category="Bounds")
      int Xmin = -640;
@@ -73,6 +84,14 @@ private:
      int Zmin = 10;
     UPROPERTY(EditAnywhere, Category="Bounds")
 	 int Zmax = 370;
+	
+	UPROPERTY(EditAnywhere, Category="Boid Settings")
+	FRotator RotateOffset;
+
+	UPROPERTY(VisibleAnywhere, Category="Boid Settings")
+	TArray<FVector> RayDirections;
+
+	void CreateBoids();
 	
 public:	
 	// Called every frame

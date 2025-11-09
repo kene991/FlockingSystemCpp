@@ -54,6 +54,7 @@ private:
 	FVector CohesionCalculation(TArray<ABoid*> Neighbors);
 	FVector SeparationCalculation(TArray<ABoid*> Neighbors);
 	FVector AlignmentCalculation(TArray<ABoid*> Neighbors);
+	FVector FindClearDirection();
 
 public:	
 	// Called every frame
