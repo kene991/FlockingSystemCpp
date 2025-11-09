@@ -21,6 +21,9 @@ public:
 	void SetDistance(float distance);
 	void SetAngleView(float angle);
 
+	FVector GetVelocityVector();
+	void SetVelocityVector(FVector v);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

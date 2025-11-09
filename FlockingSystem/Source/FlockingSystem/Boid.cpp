@@ -65,6 +65,16 @@ void ABoid::SetAngleView(float angle)
 	CosAngleView = angle;
 }
 
+FVector ABoid::GetVelocityVector()
+{
+	return VelocityVector;
+}
+
+void ABoid::SetVelocityVector(FVector v)
+{
+	VelocityVector = v;
+}
+
 void ABoid::LockInsideBounds()
 {
 	//Keeping the boids LOCKED inside the bounds
@@ -107,6 +117,8 @@ FVector ABoid::AlignmentCalculation(TArray<ABoid*> Neighbors)
 	{
 		for (class ABoid* N : Neighbors)
 		{
+			if (N == this) continue;
+			
 			V = V + N->GetActorLocation();
 		}
 
@@ -118,6 +130,26 @@ FVector ABoid::AlignmentCalculation(TArray<ABoid*> Neighbors)
 	return  FVector::ZeroVector;
 }
 
+FVector ABoid::SeparationCalculation(TArray<ABoid*> Neighbors)
+{
+	FVector V = FVector::ZeroVector;
+	
+	if (Neighbors.Num() > 0)
+	{
+		for (class ABoid* N : Neighbors)
+		{
+			if (N == this) continue;
+			
+			V = V - (N->GetActorLocation() - GetActorLocation());
+		}
+
+		return V * BoidManager->SeparationWeight;
+	}
+
+	return FVector::ZeroVector;
+}
+
+
 // Called every frame
 void ABoid::Tick(float DeltaTime)
 {
@@ -126,6 +158,8 @@ void ABoid::Tick(float DeltaTime)
 	SetActorLocation(GetActorLocation() + VelocityVector * DeltaTime);
 	VelocityVector += BoundArea(GetActorLocation());
 	VelocityVector += AlignmentCalculation(Neighbor);
+	VelocityVector += SeparationCalculation(Neighbor);
+	BoidManager->LimitSpeed(this);
 	
 	LockInsideBounds();
 	FRotator NewRot = UKismetMathLibrary::MakeRotFromX(VelocityVector);

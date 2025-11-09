@@ -20,6 +20,8 @@ public:
 	FVector GetMinBounds();
 	FVector GetMaxBounds();
 
+	void LimitSpeed(ABoid* boid);
+
 	UPROPERTY(EditAnywhere, Category="Rule Factor", meta=(ClampMin="0.0", ClampMax="1.0", UIMin="0.0", UIMax="1.0"))
 	float CohesionWeight;
 

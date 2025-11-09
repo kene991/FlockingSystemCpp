@@ -23,6 +23,17 @@ FVector ABoidManager::GetMaxBounds()
 	return  FVector(Xmax,Ymax,Zmax);
 }
 
+void ABoidManager::LimitSpeed(ABoid* boid)
+{
+	FVector V = FVector::ZeroVector;
+	
+	if (boid->GetVelocityVector().Size() > speedMax)
+	{
+		V = (boid->GetVelocityVector() / boid->GetVelocityVector().Size()) * speedMax;
+		boid->SetVelocityVector(V);
+	}
+}
+
 // Called when the game starts or when spawned
 void ABoidManager::BeginPlay()
 {
