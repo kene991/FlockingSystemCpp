@@ -46,6 +46,11 @@ private:
 	
 	FVector VelocityVector;
 	void LockInsideBounds();
+	void NeighborCheck(FVector Start);
+
+	FVector CohesionCalculation(TArray<ABoid*> Neighbors);
+	FVector SeparationCalculation(TArray<ABoid*> Neighbors);
+	FVector AlignmentCalculation(TArray<ABoid*> Neighbors);
 
 public:	
 	// Called every frame

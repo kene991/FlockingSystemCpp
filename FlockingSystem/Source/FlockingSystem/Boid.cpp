@@ -3,6 +3,7 @@
 
 #include "Boid.h"
 
+#include "GeometryCollection/GeometryCollectionComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Math/UnrealMath.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -74,22 +75,8 @@ void ABoid::LockInsideBounds()
 	SetActorLocation(P);
 }
 
-// Called every frame
-void ABoid::Tick(float DeltaTime)
+void ABoid::NeighborCheck(FVector Start)
 {
-	Super::Tick(DeltaTime);
-	
-	SetActorLocation(GetActorLocation() + VelocityVector * DeltaTime);
-	VelocityVector += BoundArea(GetActorLocation());
-	
-	LockInsideBounds();
-	FRotator NewRot = UKismetMathLibrary::MakeRotFromX(VelocityVector);
-	SetActorRotation(NewRot);
-
-	FVector Start = GetActorLocation();
-	FVector End = (GetActorLocation() + VelocityVector.GetSafeNormal() * Distance);
-	
-
 	TArray<AActor*> BoidsNearBy;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABoid::StaticClass(), BoidsNearBy);
 
@@ -110,9 +97,44 @@ void ABoid::Tick(float DeltaTime)
 			}
 		}
 	}
+}
 
+FVector ABoid::AlignmentCalculation(TArray<ABoid*> Neighbors)
+{
+	FVector V = FVector::ZeroVector;
+
+	if (Neighbors.Num() > 0)
+	{
+		for (class ABoid* N : Neighbors)
+		{
+			V = V + N->GetActorLocation();
+		}
+
+		V/=Neighbors.Num();
+
+		return ((V - GetActorLocation())) * BoidManager->AlignmentWeight;
+	}
+
+	return  FVector::ZeroVector;
+}
+
+// Called every frame
+void ABoid::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	
+	SetActorLocation(GetActorLocation() + VelocityVector * DeltaTime);
+	VelocityVector += BoundArea(GetActorLocation());
+	VelocityVector += AlignmentCalculation(Neighbor);
+	
+	LockInsideBounds();
+	FRotator NewRot = UKismetMathLibrary::MakeRotFromX(VelocityVector);
+	SetActorRotation(NewRot);
+
+	FVector Start = GetActorLocation();
+	FVector End = (GetActorLocation() + VelocityVector.GetSafeNormal() * Distance);
+	
+	NeighborCheck(Start);
 	DrawDebugDirectionalArrow(GetWorld(), Start, End, 1.f, FColor::Red);
-
-
 }
 

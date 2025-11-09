@@ -20,6 +20,15 @@ public:
 	FVector GetMinBounds();
 	FVector GetMaxBounds();
 
+	UPROPERTY(EditAnywhere, Category="Rule Factor", meta=(ClampMin="0.0", ClampMax="1.0", UIMin="0.0", UIMax="1.0"))
+	float CohesionWeight;
+
+	UPROPERTY(EditAnywhere, Category="Rule Factor", meta=(ClampMin="0.0", ClampMax="1.0", UIMin="0.0", UIMax="1.0"))
+	float SeparationWeight;
+
+	UPROPERTY(EditAnywhere, Category="Rule Factor", meta=(ClampMin="0.0", ClampMax="1.0", UIMin="0.0", UIMax="1.0"))
+	float AlignmentWeight;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
