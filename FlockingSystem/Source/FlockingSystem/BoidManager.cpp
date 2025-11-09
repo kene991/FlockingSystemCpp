@@ -32,6 +32,11 @@ void ABoidManager::LimitSpeed(ABoid* boid)
 		V = (boid->GetVelocityVector() / boid->GetVelocityVector().Size()) * speedMax;
 		boid->SetVelocityVector(V);
 	}
+	else if (boid->GetVelocityVector().Size() < speedMin)
+	{
+		V = (boid->GetVelocityVector() / boid->GetVelocityVector().Size()) * speedMin;
+		boid->SetVelocityVector(V);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -53,13 +58,15 @@ void ABoidManager::BeginPlay()
 		Boid->SetSpeed(FMath::FRandRange(speedMin, speedMax));
 		Boid->SetTurnSpeed(DefaultTurnSpeed);
 	}
-	
 }
+
 
 // Called every frame
 void ABoidManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	
 
 }
 

@@ -20,6 +20,9 @@ public:
 	FVector GetMinBounds();
 	FVector GetMaxBounds();
 
+	UPROPERTY(EditAnywhere, Category="Boid Settings")
+	bool ShowDirection;
+	
 	void LimitSpeed(ABoid* boid);
 
 	UPROPERTY(EditAnywhere, Category="Rule Factor", meta=(ClampMin="0.0", ClampMax="1.0", UIMin="0.0", UIMax="1.0"))
@@ -56,6 +59,7 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category="Initialize Speed")
 	int DefaultTurnSpeed;
+	
 
 	UPROPERTY(EditAnywhere, Category="Bounds")
      int Xmin = -640;

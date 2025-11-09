@@ -119,7 +119,7 @@ FVector ABoid::AlignmentCalculation(TArray<ABoid*> Neighbors)
 		{
 			if (N == this) continue;
 			
-			V = V + N->GetActorLocation();
+			V += N->GetActorLocation();
 		}
 
 		V/=Neighbors.Num();
@@ -140,10 +140,30 @@ FVector ABoid::SeparationCalculation(TArray<ABoid*> Neighbors)
 		{
 			if (N == this) continue;
 			
-			V = V - (N->GetActorLocation() - GetActorLocation());
+			V -= (N->GetActorLocation() - GetActorLocation());
 		}
 
 		return V * BoidManager->SeparationWeight;
+	}
+
+	return FVector::ZeroVector;
+}
+
+FVector ABoid::CohesionCalculation(TArray<ABoid*> Neighbors)
+{
+	FVector V = FVector::ZeroVector;
+
+	if (Neighbors.Num() > 0)
+	{
+		for (class ABoid* N : Neighbors)
+		{
+			if (N == this) continue;
+			V += N->GetVelocityVector();
+		}
+
+		V/=Neighbors.Num();
+
+		return ((V - VelocityVector)) * BoidManager->CohesionWeight;
 	}
 
 	return FVector::ZeroVector;
@@ -155,20 +175,27 @@ void ABoid::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	SetActorLocation(GetActorLocation() + VelocityVector * DeltaTime);
 	VelocityVector += BoundArea(GetActorLocation());
 	VelocityVector += AlignmentCalculation(Neighbor);
+	VelocityVector += CohesionCalculation(Neighbor);
 	VelocityVector += SeparationCalculation(Neighbor);
+	
 	BoidManager->LimitSpeed(this);
+
+	SetActorLocation(GetActorLocation() + VelocityVector * DeltaTime);
 	
 	LockInsideBounds();
+	
 	FRotator NewRot = UKismetMathLibrary::MakeRotFromX(VelocityVector);
 	SetActorRotation(NewRot);
 
 	FVector Start = GetActorLocation();
 	FVector End = (GetActorLocation() + VelocityVector.GetSafeNormal() * Distance);
-	
 	NeighborCheck(Start);
-	DrawDebugDirectionalArrow(GetWorld(), Start, End, 1.f, FColor::Red);
+
+	if (BoidManager->ShowDirection)
+	{
+		DrawDebugDirectionalArrow(GetWorld(), Start, End, 1.f, FColor::Red);
+	}
 }
 
