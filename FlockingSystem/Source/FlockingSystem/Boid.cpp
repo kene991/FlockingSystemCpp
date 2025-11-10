@@ -21,7 +21,6 @@ ABoid::ABoid()
 void ABoid::BeginPlay()
 {
 	Super::BeginPlay();
-	VelocityVector += FVector::One() * Speed;
 }
 
 FVector ABoid::BoundArea(FVector boid_position)
@@ -110,26 +109,6 @@ void ABoid::NeighborCheck(FVector Start)
 	}
 }
 
-FVector ABoid::AlignmentCalculation(TArray<ABoid*> Neighbors)
-{
-	FVector V = FVector::ZeroVector;
-
-	if (Neighbors.Num() > 0)
-	{
-		for (class ABoid* N : Neighbors)
-		{
-			if (N == this) continue;
-			
-			V += N->GetActorLocation();
-		}
-
-		V/=Neighbors.Num();
-
-		return ((V - GetActorLocation())) * BoidManager->AlignmentWeight;
-	}
-
-	return  FVector::ZeroVector;
-}
 
 FVector ABoid::FindClearDirection()
 {
@@ -147,7 +126,7 @@ FVector ABoid::FindClearDirection()
 		bool DirHit = GetWorld()->LineTraceSingleByChannel(hit, GetActorLocation(), GetActorLocation() + WorldDir * Distance, SenseChannel,  QueryParams);
 
 		//https://www.youtube.com/watch?v=ekNZW4vChwU
-		float Dot = FVector::DotProduct(WorldDir, GetActorForwardVector());
+		float Dot = FVector::DotProduct(WorldDir.GetSafeNormal(), GetActorForwardVector().GetSafeNormal());
 		
 		if ((Dot < CosAngleView))
 		{
@@ -201,7 +180,7 @@ FVector ABoid::SeparationCalculation(TArray<ABoid*> Neighbors)
 	return FVector::ZeroVector;
 }
 
-FVector ABoid::CohesionCalculation(TArray<ABoid*> Neighbors)
+FVector ABoid::AlignmentCalculation(TArray<ABoid*> Neighbors)
 {
 	FVector V = FVector::ZeroVector;
 
@@ -213,26 +192,50 @@ FVector ABoid::CohesionCalculation(TArray<ABoid*> Neighbors)
 			V += N->GetVelocityVector();
 		}
 
-		V/=Neighbors.Num();
+		if (Neighbors.Num() > 0)
+			V/=Neighbors.Num();
 
-		return ((V - VelocityVector)) * BoidManager->CohesionWeight;
+		return ((V - VelocityVector)) * BoidManager->AlignmentWeight;
 	}
 
 	return FVector::ZeroVector;
 }
 
+FVector ABoid::CohesionCalculation(TArray<ABoid*> Neighbors)
+{
+	FVector V = FVector::ZeroVector;
+
+	if (Neighbors.Num() > 0)
+	{
+		for (class ABoid* N : Neighbors)
+		{
+			if (N == this) continue;
+			
+			V += N->GetActorLocation();
+		}
+
+		V/=Neighbors.Num();
+
+		return ((V - GetActorLocation())) * BoidManager->CohesionWeight;
+	}
+
+	return  FVector::ZeroVector;
+}
 
 // Called every frame
 void ABoid::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	NeighborCheck(GetActorLocation());
 	
 	VelocityVector += BoundArea(GetActorLocation());
-	VelocityVector += AlignmentCalculation(Neighbor);
-	VelocityVector += CohesionCalculation(Neighbor);
-	VelocityVector += SeparationCalculation(Neighbor);
+	VelocityVector += AlignmentCalculation(Neighbor) * BoidManager->AlignmentMultiplier;
+	VelocityVector += CohesionCalculation(Neighbor) * BoidManager->CohesionMultiplier;
+	VelocityVector += SeparationCalculation(Neighbor) * BoidManager->SeparationMultiplier;
 
-	VelocityVector += FindClearDirection();
+	if (BoidManager->AvoidenceWeight > 0.0f)
+		VelocityVector += FindClearDirection();
 	
 	BoidManager->LimitSpeed(this);
 
@@ -243,12 +246,10 @@ void ABoid::Tick(float DeltaTime)
 	FRotator NewRot = UKismetMathLibrary::MakeRotFromX(VelocityVector);
 	SetActorRotation(NewRot);
 
-	FVector Start = GetActorLocation();
-	FVector End = (GetActorLocation() + VelocityVector.GetSafeNormal() * Distance);
-	NeighborCheck(Start);
-
 	if (BoidManager->ShowDebug)
 	{
+		FVector Start = GetActorLocation();
+		FVector End = (GetActorLocation() + VelocityVector.GetSafeNormal() * Distance);
 		DrawDebugDirectionalArrow(GetWorld(), Start, End, 1.f, FColor::Red);
 	}
 }
