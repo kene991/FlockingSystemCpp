@@ -14,7 +14,7 @@ ABoid::ABoid()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	VelocityVector = FVector:: ZeroVector;
+	//VelocityVector = FVector:: ZeroVector;
 }
 
 // Called when the game starts or when spawned
@@ -158,22 +158,22 @@ FVector ABoid::FindClearDirection()
 		}
 				//return the direction away from the obstacle
 				return bestDir * BoidManager->GetMaxSpeed() * BoidManager->AvoidenceWeight; 
-		}
+}
 
 
 FVector ABoid::SeparationCalculation(TArray<ABoid*> Neighbors)
 {
 	FVector V = FVector::ZeroVector;
-	
+
+	for (class ABoid* N : Neighbors)
+	{
+		if (N == this) continue;
+			
+		V += (GetActorLocation() - N->GetActorLocation());
+	}
+
 	if (Neighbors.Num() > 0)
 	{
-		for (class ABoid* N : Neighbors)
-		{
-			if (N == this) continue;
-			
-			V -= (N->GetActorLocation() - GetActorLocation());
-		}
-
 		return V * BoidManager->SeparationWeight;
 	}
 
@@ -183,19 +183,17 @@ FVector ABoid::SeparationCalculation(TArray<ABoid*> Neighbors)
 FVector ABoid::AlignmentCalculation(TArray<ABoid*> Neighbors)
 {
 	FVector V = FVector::ZeroVector;
-
+	
 	if (Neighbors.Num() > 0)
 	{
-		for (class ABoid* N : Neighbors)
-		{
-			if (N == this) continue;
-			V += N->GetVelocityVector();
-		}
-
-		if (Neighbors.Num() > 0)
-			V/=Neighbors.Num();
-
-		return ((V - VelocityVector)) * BoidManager->AlignmentWeight;
+	for (class ABoid* N : Neighbors)
+	{
+		if (N == this) continue;
+		V += N->GetVelocityVector().GetSafeNormal();
+	}
+		
+		V/=Neighbors.Num();
+		return ((V.GetSafeNormal() - VelocityVector.GetSafeNormal())) * BoidManager->AlignmentWeight * BoidManager->GetMaxSpeed();
 	}
 
 	return FVector::ZeroVector;
@@ -205,17 +203,16 @@ FVector ABoid::CohesionCalculation(TArray<ABoid*> Neighbors)
 {
 	FVector V = FVector::ZeroVector;
 
+	for (class ABoid* N : Neighbors)
+	{
+		if (N == this) continue;
+			
+		V += N->GetActorLocation();
+	}
+
 	if (Neighbors.Num() > 0)
 	{
-		for (class ABoid* N : Neighbors)
-		{
-			if (N == this) continue;
-			
-			V += N->GetActorLocation();
-		}
-
 		V/=Neighbors.Num();
-
 		return ((V - GetActorLocation())) * BoidManager->CohesionWeight;
 	}
 
@@ -229,13 +226,19 @@ void ABoid::Tick(float DeltaTime)
 
 	NeighborCheck(GetActorLocation());
 	
-	VelocityVector += BoundArea(GetActorLocation());
-	VelocityVector += AlignmentCalculation(Neighbor) * BoidManager->AlignmentMultiplier;
-	VelocityVector += CohesionCalculation(Neighbor) * BoidManager->CohesionMultiplier;
-	VelocityVector += SeparationCalculation(Neighbor) * BoidManager->SeparationMultiplier;
-
 	if (BoidManager->AvoidenceWeight > 0.0f)
 		VelocityVector += FindClearDirection();
+
+	VelocityVector += AlignmentCalculation(Neighbor);
+	VelocityVector += CohesionCalculation(Neighbor);
+	VelocityVector += SeparationCalculation(Neighbor);
+
+	VelocityVector +=  BoundArea(GetActorLocation());
+
+	if (VelocityVector.IsNearlyZero())
+	{
+		VelocityVector = GetActorForwardVector() * BoidManager->GetMaxSpeed();
+	}
 	
 	BoidManager->LimitSpeed(this);
 

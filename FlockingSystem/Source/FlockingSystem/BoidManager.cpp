@@ -96,6 +96,7 @@ void ABoidManager::CreateBoids()
 		Boid->SetActorLocation( FMath::RandPointInBox(bounds));
 		Boid->SetSpeed(FMath::FRandRange(SpeedMin, SpeedMax));
 		Boid->SetTurnSpeed(DefaultTurnSpeed);
+		Boid->SetActorRotation(FMath::VRand().ToOrientationRotator());
 	}
 }
 
