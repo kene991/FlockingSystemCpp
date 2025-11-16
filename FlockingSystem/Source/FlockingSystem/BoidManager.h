@@ -22,39 +22,54 @@ public:
 
 	void CreateAvoidenceRays();
 	TArray<FVector> GetRaysVectors();
-
-	float GetMaxSpeed();
-	float GetMinSpeed();
-
+	
 	UPROPERTY(EditAnywhere, Category="Boid Settings")
-	bool ShowDebug;
+	bool ShowDirectionalDebug;
 	
 	void LimitSpeed(ABoid* boid);
 
-	UPROPERTY(EditAnywhere, Category="Rule Factor", meta=(ClampMin="0.0", ClampMax="1.0", UIMin="0.0", UIMax="1.0"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Rule Factor", meta=(ClampMin="0.0", ClampMax="1.0", UIMin="0.0", UIMax="1.0"))
 	float CohesionWeight;
 
-	UPROPERTY(EditAnywhere, Category="Rule Factor", meta=(ClampMin="0.0", ClampMax="1.0", UIMin="0.0", UIMax="1.0"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Rule Factor", meta=(ClampMin="0.0", ClampMax="1.0", UIMin="0.0", UIMax="1.0"))
 	float SeparationWeight;
 
-	UPROPERTY(EditAnywhere, Category="Rule Factor", meta=(ClampMin="0.0", ClampMax="1.0", UIMin="0.0", UIMax="1.0"))
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Rule Factor", meta=(ClampMin="0.0", ClampMax="1.0", UIMin="0.0", UIMax="1.0"))
 	float AlignmentWeight;
 
-	UPROPERTY(EditAnywhere, Category="Rule Factor", meta=(ClampMin="0.0", ClampMax="1.0", UIMin="0.0", UIMax="1.0"))
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Rule Factor", meta=(ClampMin="0.0", ClampMax="1.0", UIMin="0.0", UIMax="1.0"))
 	float AvoidenceWeight;
 
-	UPROPERTY(EditAnywhere, Category="Initialize Speed")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Initialize Speed")
+	float SpeedMin;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Initialize Speed")
+	float SpeedMax;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Initialize Speed")
 	int DefaultTurnSpeed;
 	
-	UPROPERTY(EditAnywhere, Category="Distance")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Distance")
 	float BoidDistance;
 
-	UPROPERTY(EditAnywhere, Category="View Angle")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="View Angle")
 	float BoidCosAngleView;
 
-	UPROPERTY(EditAnywhere, Category="Bounds")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Bounds")
 	int Padding = 370;
 
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category="Boids")
+	int32 MaxBoidCount = 300;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category="Boids")
+	int32 MinBoidCount = 30;
+
+	UFUNCTION(BlueprintCallable)
+	void AdjustBoidCount(int32 TargetCount);
+	
+	float GetMaxSpeed();
+	float GetMinSpeed();
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -65,13 +80,7 @@ private:
 
 	UPROPERTY(EditAnywhere, Category="Setup Boid")
 	int BoidCount;
-	
-	UPROPERTY(EditAnywhere, Category="Initialize Speed")
-	float SpeedMin;
 
-	UPROPERTY(EditAnywhere, Category="Initialize Speed")
-	float SpeedMax;
-	
 	UPROPERTY(EditAnywhere, Category="Avoidance")
 	int NumberOfPoints;
 
@@ -94,8 +103,9 @@ private:
 	UPROPERTY(VisibleAnywhere, Category="Boid Settings")
 	TArray<FVector> RayDirections;
 
-	void CreateBoids();
-	
+	TArray<ABoid*> Boids;
+	int32 lastCount;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

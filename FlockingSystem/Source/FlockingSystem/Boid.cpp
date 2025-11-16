@@ -120,7 +120,7 @@ FVector ABoid::FindClearDirection()
 			if (!DirHit)
 			{
 				// Perfect clear direction, return immediately
-				if (BoidManager->ShowDebug)
+				if (BoidManager->ShowDirectionalDebug)
 					DrawDebugLine(GetWorld(), GetActorLocation(), GetActorLocation() + WorldDir * Distance, FColor::Green, false, -1.0f, 0, 1.5f);
 				
 				// no obstacle in view radius
@@ -134,7 +134,7 @@ FVector ABoid::FindClearDirection()
 					BestDir = WorldDir;
 					FurthestUnobstructedDist = Hit.Distance;
 
-					if (BoidManager->ShowDebug)
+					if (BoidManager->ShowDirectionalDebug)
 					{
 					DrawDebugLine(GetWorld(), GetActorLocation(), Hit.ImpactPoint, FColor::Red, false, -1.0f, 0, 1.5f);
 					DrawDebugSphere(GetWorld(), Hit.ImpactPoint, 8.0f, 12, FColor::Red, false, -1.0f, 0, 1.0f);
@@ -238,7 +238,7 @@ void ABoid::Tick(float DeltaTime)
 	FRotator NewRot = UKismetMathLibrary::MakeRotFromX(VelocityVector);
 	SetActorRotation(NewRot);
 
-	if (BoidManager->ShowDebug)
+	if (BoidManager->ShowDirectionalDebug)
 	{
 		FVector Start = GetActorLocation();
 		FVector End = (GetActorLocation() + VelocityVector.GetSafeNormal() * Distance);

@@ -43,7 +43,6 @@ void ABoidManager::BeginPlay()
 {
 	Super::BeginPlay();
 	CreateAvoidenceRays();
-	CreateBoids();
 }
 
 TArray<FVector> ABoidManager::GetRaysVectors()
@@ -69,30 +68,50 @@ void ABoidManager::CreateAvoidenceRays()
 	for (int i = 0; i < NumberOfPoints; i++)
 	{
 		float t = (float)i / (NumberOfPoints);
-		float inclination = FMath::Acos(1 - 2 * t);
-		float azimuth = GoldenAngle * i;
+		float Inclination = FMath::Acos(1 - 2 * t);
+		float Azimuth = GoldenAngle * i;
 
-		float x = FMath::Cos(azimuth) * FMath::Sin(inclination);
-		float y = FMath::Sin(inclination) * FMath::Sin(azimuth);
-		float z = FMath::Cos(inclination);
+		float x = FMath::Cos(Azimuth) * FMath::Sin(Inclination);
+		float y = FMath::Sin(Inclination) * FMath::Sin(Azimuth);
+		float z = FMath::Cos(Inclination);
 		FRotator Rotator = RotateOffset;
 
 		RayDirections.Add(Rotator.RotateVector(FVector(x, y, z)));
 	}
 }
 
-void ABoidManager::CreateBoids()
+void ABoidManager::AdjustBoidCount(int32 TargetCount)
 {
-	FVector boundMin = FVector(Xmin, Ymin, Zmin);
-	FVector boundMax = FVector(Xmax, Ymax, Zmax);
-	FBox bounds = FBox(boundMin, boundMax); //creating a box Vector
+	FVector BoundMin = FVector(Xmin, Ymin, Zmin);
+	FVector BoundMax = FVector(Xmax, Ymax, Zmax);
+	FBox Bounds = FBox(BoundMin, BoundMax); //creating a box Vector
 	
-	for (int i = 0; i < BoidCount; i++)
+	int32 CurrentCount = Boids.Num();
+
+	// if I need more boids
+	if (CurrentCount < TargetCount)
 	{
-		ABoid* Boid = GetWorld()->SpawnActor<ABoid>(BoidClass);
-		Boid->BoidManager = this;
-		Boid->SetActorLocation( FMath::RandPointInBox(bounds));
-		Boid->SetActorRotation(FMath::VRand().ToOrientationRotator());
+		int32 ToSpawn = TargetCount - CurrentCount;
+		for (int32 i = 0; i < ToSpawn; i++)
+		{
+			ABoid* Boid = GetWorld()->SpawnActor<ABoid>(BoidClass);
+			Boid->BoidManager = this;
+			Boid->SetActorLocation( FMath::RandPointInBox(Bounds));
+			Boid->SetActorRotation(FMath::VRand().ToOrientationRotator());
+			Boids.Add(Boid);
+		}
+	}
+	// if too many boids are present
+	else if (CurrentCount > TargetCount)
+	{
+		int32 ToRemove = CurrentCount - TargetCount;
+
+		for (int32 i = 0; i < ToRemove; i++)
+		{
+			ABoid* B = Boids.Pop();  // removes last safely
+			if (B)
+				B->Destroy();
+		}
 	}
 }
 
