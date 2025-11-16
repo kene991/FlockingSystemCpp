@@ -16,11 +16,6 @@ public:
 	// Sets default values for this actor's properties
 	ABoid();
 
-	void SetSpeed(float speed);
-	void SetTurnSpeed(float turnSpeed);
-	void SetDistance(float distance);
-	void SetAngleView(float angle);
-
 	FVector GetVelocityVector();
 	void SetVelocityVector(FVector v);
 
@@ -48,6 +43,8 @@ private:
 	float TurnSpeed;
 	
 	FVector VelocityVector;
+	
+	void UpdateBoidVariables();
 	void LockInsideBounds();
 	void NeighborCheck(FVector Start);
 

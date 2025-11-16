@@ -50,21 +50,6 @@ void ABoid::SetSpeed(float speed)
 	Speed = speed;	
 }
 
-void ABoid::SetTurnSpeed(float turnSpeed)
-{
-	TurnSpeed = turnSpeed;
-}
-
-void ABoid::SetDistance(float distance)
-{
-	Distance = distance;
-}
-
-void ABoid::SetAngleView(float angle)
-{
-	CosAngleView = angle;
-}
-
 FVector ABoid::GetVelocityVector()
 {
 	return VelocityVector;
@@ -73,6 +58,13 @@ FVector ABoid::GetVelocityVector()
 void ABoid::SetVelocityVector(FVector v)
 {
 	VelocityVector = v;
+}
+
+void ABoid::UpdateBoidVariables()
+{
+	this->TurnSpeed = BoidManager->DefaultTurnSpeed;
+	this->Distance = BoidManager->BoidDistance;
+	this->CosAngleView= BoidManager->BoidCosAngleView;
 }
 
 void ABoid::LockInsideBounds()
@@ -112,9 +104,9 @@ void ABoid::NeighborCheck(FVector Start)
 
 FVector ABoid::FindClearDirection()
 {
-	FVector bestDir = GetActorForwardVector();
-	float furthestUnobstructedDist =	0.0f;
-	FHitResult hit;
+	FVector BestDir = GetActorForwardVector();
+	float FurthestUnobstructedDist =	0.0f;
+	FHitResult Hit;
 	ECollisionChannel SenseChannel = ECC_GameTraceChannel1;
 	FCollisionQueryParams QueryParams;
 	QueryParams.AddIgnoredActor(this); // Ignore the actor performing the trace
@@ -123,7 +115,7 @@ FVector ABoid::FindClearDirection()
 	{
 		FVector LocalDir = BoidManager->GetRaysVectors()[i];
 		FVector WorldDir = GetTransform().GetRotation().RotateVector(LocalDir);
-		bool DirHit = GetWorld()->LineTraceSingleByChannel(hit, GetActorLocation(), GetActorLocation() + WorldDir * Distance, SenseChannel,  QueryParams);
+		bool DirHit = GetWorld()->LineTraceSingleByChannel(Hit, GetActorLocation(), GetActorLocation() + WorldDir * Distance, SenseChannel,  QueryParams);
 
 		//https://www.youtube.com/watch?v=ekNZW4vChwU
 		float Dot = FVector::DotProduct(WorldDir.GetSafeNormal(), GetActorForwardVector().GetSafeNormal());
@@ -142,22 +134,22 @@ FVector ABoid::FindClearDirection()
 			else
 			{
 				//if we hit something
-				if (hit.Distance > furthestUnobstructedDist)
+				if (Hit.Distance > FurthestUnobstructedDist)
 				{
-					bestDir = WorldDir;
-					furthestUnobstructedDist = hit.Distance;
+					BestDir = WorldDir;
+					FurthestUnobstructedDist = Hit.Distance;
 
 					if (BoidManager->ShowDebug)
 					{
-					DrawDebugLine(GetWorld(), GetActorLocation(), hit.ImpactPoint, FColor::Red, false, -1.0f, 0, 1.5f);
-					DrawDebugSphere(GetWorld(), hit.ImpactPoint, 8.0f, 12, FColor::Red, false, -1.0f, 0, 1.0f);
+					DrawDebugLine(GetWorld(), GetActorLocation(), Hit.ImpactPoint, FColor::Red, false, -1.0f, 0, 1.5f);
+					DrawDebugSphere(GetWorld(), Hit.ImpactPoint, 8.0f, 12, FColor::Red, false, -1.0f, 0, 1.0f);
 					}
 			}
 			}
 	}
 		}
 				//return the direction away from the obstacle
-				return bestDir * BoidManager->GetMaxSpeed() * BoidManager->AvoidenceWeight; 
+				return BestDir * BoidManager->GetMaxSpeed() * BoidManager->AvoidenceWeight; 
 }
 
 
@@ -193,7 +185,7 @@ FVector ABoid::AlignmentCalculation(TArray<ABoid*> Neighbors)
 	}
 		
 		V/=Neighbors.Num();
-		return ((V.GetSafeNormal() - VelocityVector.GetSafeNormal())) * BoidManager->AlignmentWeight * BoidManager->GetMaxSpeed();
+		return ((V.GetSafeNormal() - VelocityVector.GetSafeNormal())) * BoidManager->AlignmentWeight * BoidManager->GetMinSpeed();
 	}
 
 	return FVector::ZeroVector;
@@ -224,22 +216,23 @@ void ABoid::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	UpdateBoidVariables();
+	
 	NeighborCheck(GetActorLocation());
 	
 	if (BoidManager->AvoidenceWeight > 0.0f)
 		VelocityVector += FindClearDirection();
+
+	if (VelocityVector.IsNearlyZero())
+	{
+		VelocityVector = GetActorForwardVector() * BoidManager->GetMaxSpeed();
+	}
 
 	VelocityVector += AlignmentCalculation(Neighbor);
 	VelocityVector += CohesionCalculation(Neighbor);
 	VelocityVector += SeparationCalculation(Neighbor);
 
 	VelocityVector +=  BoundArea(GetActorLocation());
-
-	if (VelocityVector.IsNearlyZero())
-	{
-		VelocityVector = GetActorForwardVector() * BoidManager->GetMaxSpeed();
-	}
-	
 	BoidManager->LimitSpeed(this);
 
 	SetActorLocation(GetActorLocation() + VelocityVector * DeltaTime);

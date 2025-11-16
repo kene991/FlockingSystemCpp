@@ -43,6 +43,15 @@ public:
 	UPROPERTY(EditAnywhere, Category="Rule Factor", meta=(ClampMin="0.0", ClampMax="1.0", UIMin="0.0", UIMax="1.0"))
 	float AvoidenceWeight;
 
+	UPROPERTY(EditAnywhere, Category="Initialize Speed")
+	int DefaultTurnSpeed;
+	
+	UPROPERTY(EditAnywhere, Category="Distance")
+	float BoidDistance;
+
+	UPROPERTY(EditAnywhere, Category="View Angle")
+	float BoidCosAngleView;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -53,12 +62,6 @@ private:
 
 	UPROPERTY(EditAnywhere, Category="Setup Boid")
 	int BoidCount;
-
-	UPROPERTY(EditAnywhere, Category="Distance")
-	float BoidDistance;
-
-	UPROPERTY(EditAnywhere, Category="View Angle")
-	float BoidCosAngleView;
 	
 	UPROPERTY(EditAnywhere, Category="Initialize Speed")
 	float SpeedMin;
@@ -66,8 +69,6 @@ private:
 	UPROPERTY(EditAnywhere, Category="Initialize Speed")
 	float SpeedMax;
 	
-	UPROPERTY(EditAnywhere, Category="Initialize Speed")
-	int DefaultTurnSpeed;
 
 	UPROPERTY(EditAnywhere, Category="Avoidance")
 	int NumberOfPoints;
@@ -84,6 +85,8 @@ private:
      int Zmin = 10;
     UPROPERTY(EditAnywhere, Category="Bounds")
 	 int Zmax = 370;
+	UPROPERTY(EditAnywhere, Category="Bounds")
+	int Padding = 370;
 	
 	UPROPERTY(EditAnywhere, Category="Boid Settings")
 	FRotator RotateOffset;

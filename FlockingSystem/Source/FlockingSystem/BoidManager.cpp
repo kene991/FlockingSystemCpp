@@ -91,11 +91,7 @@ void ABoidManager::CreateBoids()
 	{
 		ABoid* Boid = GetWorld()->SpawnActor<ABoid>(BoidClass);
 		Boid->BoidManager = this;
-		Boid->SetDistance(BoidDistance);
-		Boid->SetAngleView(BoidCosAngleView);
 		Boid->SetActorLocation( FMath::RandPointInBox(bounds));
-		Boid->SetSpeed(FMath::FRandRange(SpeedMin, SpeedMax));
-		Boid->SetTurnSpeed(DefaultTurnSpeed);
 		Boid->SetActorRotation(FMath::VRand().ToOrientationRotator());
 	}
 }
