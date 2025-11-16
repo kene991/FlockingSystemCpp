@@ -27,19 +27,19 @@ FVector ABoid::BoundArea(FVector boid_position)
 {
 	FVector V = FVector::ZeroVector;
 
-	if (boid_position.X < BoidManager->GetMinBounds().X + 10) 
+	if (boid_position.X < BoidManager->GetMinBounds().X + BoidManager->Padding) 
 		V.X = TurnSpeed;
-	else if (boid_position.X > BoidManager->GetMaxBounds().X - 10)
+	else if (boid_position.X > BoidManager->GetMaxBounds().X - BoidManager->Padding)
 		V.X = -TurnSpeed;
 
-	if (boid_position.Y < BoidManager->GetMinBounds().Y + 10)
+	if (boid_position.Y < BoidManager->GetMinBounds().Y + BoidManager->Padding)
 		V.Y = TurnSpeed;
-	else if (boid_position.Y > BoidManager->GetMaxBounds().Y - 10)
+	else if (boid_position.Y > BoidManager->GetMaxBounds().Y - BoidManager->Padding)
 		V.Y = -TurnSpeed;
 
-	if (boid_position.Z < BoidManager->GetMinBounds().Z + 10)
+	if (boid_position.Z < BoidManager->GetMinBounds().Z + BoidManager->Padding)
 		V.Z = TurnSpeed;
-	else if (boid_position.Z > BoidManager->GetMaxBounds().Z - 10)
+	else if (boid_position.Z > BoidManager->GetMaxBounds().Z - BoidManager->Padding)
 		V.Z = -TurnSpeed;
 
 	return V;
@@ -228,6 +228,7 @@ void ABoid::Tick(float DeltaTime)
 	VelocityVector += SeparationCalculation(Neighbor);
 
 	VelocityVector +=  BoundArea(GetActorLocation());
+	
 	BoidManager->LimitSpeed(this);
 
 	SetActorLocation(GetActorLocation() + VelocityVector * DeltaTime);

@@ -52,6 +52,9 @@ public:
 	UPROPERTY(EditAnywhere, Category="View Angle")
 	float BoidCosAngleView;
 
+	UPROPERTY(EditAnywhere, Category="Bounds")
+	int Padding = 370;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -69,7 +72,6 @@ private:
 	UPROPERTY(EditAnywhere, Category="Initialize Speed")
 	float SpeedMax;
 	
-
 	UPROPERTY(EditAnywhere, Category="Avoidance")
 	int NumberOfPoints;
 
@@ -85,8 +87,6 @@ private:
      int Zmin = 10;
     UPROPERTY(EditAnywhere, Category="Bounds")
 	 int Zmax = 370;
-	UPROPERTY(EditAnywhere, Category="Bounds")
-	int Padding = 370;
 	
 	UPROPERTY(EditAnywhere, Category="Boid Settings")
 	FRotator RotateOffset;
