@@ -45,11 +45,6 @@ FVector ABoid::BoundArea(FVector boid_position)
 	return V;
 }
 
-void ABoid::SetSpeed(float speed)
-{
-	Speed = speed;	
-}
-
 FVector ABoid::GetVelocityVector()
 {
 	return VelocityVector;
