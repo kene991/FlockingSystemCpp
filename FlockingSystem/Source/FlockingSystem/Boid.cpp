@@ -231,6 +231,9 @@ void ABoid::Tick(float DeltaTime)
 	
 	BoidManager->LimitSpeed(this);
 
+	if (BoidManager->disableZAxis)
+		VelocityVector.Z = 0;
+	
 	SetActorLocation(GetActorLocation() + VelocityVector * DeltaTime);
 	
 	LockInsideBounds();

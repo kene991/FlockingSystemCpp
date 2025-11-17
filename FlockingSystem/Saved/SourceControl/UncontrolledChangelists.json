@@ -10,7 +10,13 @@
 				"C:/Users/kumel/Documents/UnrealGit/FlockingSystemCpp/FlockingSystem/Content/Boids/Materials/Black.uasset",
 				"C:/Users/kumel/Documents/UnrealGit/FlockingSystemCpp/FlockingSystem/Content/StarterContent/Architecture/Floor_400x400.uasset",
 				"C:/Users/kumel/Documents/UnrealGit/FlockingSystemCpp/FlockingSystem/Content/Boids/Materials/Orange.uasset",
-				"C:/Users/kumel/Documents/UnrealGit/FlockingSystemCpp/FlockingSystem/Content/Boids/Blueprints/BP_BoidFish.uasset"
+				"C:/Users/kumel/Documents/UnrealGit/FlockingSystemCpp/FlockingSystem/Content/Boids/Blueprints/BP_BoidFish.uasset",
+				"C:/Users/kumel/Documents/UnrealGit/FlockingSystemCpp/FlockingSystem/Content/Boids/Boids_Ants.umap",
+				"C:/Users/kumel/Documents/UnrealGit/FlockingSystemCpp/FlockingSystem/Content/Boids/Blueprints/BP_BoidAnt.uasset",
+				"C:/Users/kumel/Documents/UnrealGit/FlockingSystemCpp/FlockingSystem/Content/Boids/Materials/Brown.uasset",
+				"C:/Users/kumel/Documents/UnrealGit/FlockingSystemCpp/FlockingSystem/Content/Boids/Blueprints/BP_FlockingInteractor.uasset",
+				"C:/Users/kumel/Documents/UnrealGit/FlockingSystemCpp/FlockingSystem/Content/Boids/Widget/W_BoidInteraction.uasset",
+				"C:/Users/kumel/Documents/UnrealGit/FlockingSystemCpp/FlockingSystem/Content/Boids/Materials/Yellow1.uasset"
 			]
 		}
 	]

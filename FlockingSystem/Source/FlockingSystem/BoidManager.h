@@ -26,6 +26,9 @@ public:
 	UPROPERTY(EditAnywhere, Category="Boid Settings")
 	bool ShowDirectionalDebug;
 	
+	UPROPERTY(EditAnywhere, Category="Boid Settings")
+	bool disableZAxis;
+	
 	void LimitSpeed(ABoid* boid);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Rule Factor", meta=(ClampMin="0.0", ClampMax="1.0", UIMin="0.0", UIMax="1.0"))
@@ -56,7 +59,7 @@ public:
 	float BoidCosAngleView;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Bounds")
-	int Padding = 370;
+	int Padding;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category="Boids")
 	int32 MaxBoidCount = 300;
@@ -85,17 +88,17 @@ private:
 	int NumberOfPoints;
 
 	UPROPERTY(EditAnywhere, Category="Bounds")
-     int Xmin = -640;
+     int Xmin;
 	UPROPERTY(EditAnywhere, Category="Bounds")
-	 int Xmax = 0;
+	 int Xmax;
 	UPROPERTY(EditAnywhere, Category="Bounds")
-     int Ymin = -1120;
+     int Ymin;
     UPROPERTY(EditAnywhere, Category="Bounds")
-	 int Ymax = -400;
+	 int Ymax;
 	UPROPERTY(EditAnywhere, Category="Bounds")
-     int Zmin = 10;
+     int Zmin ;
     UPROPERTY(EditAnywhere, Category="Bounds")
-	 int Zmax = 370;
+	 int Zmax;
 	
 	UPROPERTY(EditAnywhere, Category="Boid Settings")
 	FRotator RotateOffset;
